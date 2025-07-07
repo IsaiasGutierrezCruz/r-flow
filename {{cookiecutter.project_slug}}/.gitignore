@@ -33,7 +33,7 @@ renv/staging/
 *.pptx
 *_cache/
 *_files/
-/output/
+# /output/
 # /docs/
 /inst/doc/
 
