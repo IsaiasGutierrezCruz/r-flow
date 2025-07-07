@@ -42,7 +42,7 @@ def initialize_git():
             
             # Set up GitHub remote if requested
             if "{{ cookiecutter.use_github }}" == "y":
-                github_url = f"https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}.git"
+                github_url = f"git@github.com:{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}.git"
                 if run_command(f"git remote add origin {github_url}"):
                     print(f"✅ GitHub remote added: {github_url}")
                     print("📝 Note: Remember to create the repository on GitHub and push your changes")
