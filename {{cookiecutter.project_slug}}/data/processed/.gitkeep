@@ -1,0 +1,16 @@
+# Processed Data Directory
+
+This directory contains cleaned and transformed data ready for analysis.
+
+## Guidelines
+
+- Store cleaned datasets here
+- Include data processing scripts in the scripts/ directory
+- Document transformations and cleaning procedures
+- Save in analysis-ready formats (CSV, RDS, etc.)
+
+## File Organization
+
+- Use consistent naming conventions
+- Include version numbers if applicable
+- Document data schema and variable definitions 

@@ -1,0 +1,254 @@
+---
+title: "{{ cookiecutter.project_name }} - Example Report"
+author: "{{ cookiecutter.author_name }}"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+  pdf_document:
+    toc: true
+    number_sections: true
+params:
+  data_file: "example_data.csv"
+---
+
+```{r setup, include=FALSE}
+# Setup chunk
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 8,
+  fig.height = 6,
+  fig.align = "center",
+  cache = FALSE
+)
+
+# Load required libraries
+library(here)
+{% if cookiecutter.include_tidyverse == 'y' %}
+library(tidyverse)
+library(DT)
+{% endif %}
+{% if cookiecutter.include_plotly == 'y' %}
+library(plotly)
+{% endif %}
+```
+
+# Introduction
+
+This is an example R Markdown report for **{{ cookiecutter.project_name }}**.
+
+## Project Overview
+
+- **Project**: {{ cookiecutter.project_name }}
+- **Description**: {{ cookiecutter.project_description }}
+- **Author**: {{ cookiecutter.author_name }}
+- **R Version**: {{ cookiecutter.r_version }}
+- **Report Generated**: `r Sys.Date()`
+
+# Data Loading and Preprocessing
+
+```{r data-loading}
+# Example data loading (uncomment when you have data)
+# data_path <- here("data", "raw", params$data_file)
+# if (file.exists(data_path)) {
+#   raw_data <- read.csv(data_path)
+# } else {
+#   # Create example data for demonstration
+#   raw_data <- data.frame(
+#     id = 1:100,
+#     value = rnorm(100, 50, 10),
+#     category = sample(c("A", "B", "C"), 100, replace = TRUE),
+#     date = seq(Sys.Date() - 99, Sys.Date(), by = "day")
+#   )
+# }
+
+# For demo purposes, create example data
+raw_data <- data.frame(
+  id = 1:100,
+  value = rnorm(100, 50, 10),
+  category = sample(c("A", "B", "C"), 100, replace = TRUE),
+  date = seq(Sys.Date() - 99, Sys.Date(), by = "day")
+)
+```
+
+{% if cookiecutter.include_tidyverse == 'y' %}
+```{r data-processing}
+# Data processing with tidyverse
+processed_data <- raw_data %>%
+  janitor::clean_names() %>%
+  dplyr::mutate(
+    value_scaled = scale(value)[, 1],
+    week = lubridate::week(date)
+  ) %>%
+  dplyr::filter(!is.na(value))
+
+# Summary statistics
+summary_stats <- processed_data %>%
+  dplyr::group_by(category) %>%
+  dplyr::summarise(
+    count = n(),
+    mean_value = mean(value, na.rm = TRUE),
+    sd_value = sd(value, na.rm = TRUE),
+    min_value = min(value, na.rm = TRUE),
+    max_value = max(value, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+{% endif %}
+
+# Exploratory Data Analysis
+
+## Summary Statistics
+
+```{r summary-table}
+{% if cookiecutter.include_tidyverse == 'y' %}
+# Interactive table with DT
+DT::datatable(
+  summary_stats,
+  options = list(
+    pageLength = 10,
+    scrollX = TRUE
+  ),
+  caption = "Summary Statistics by Category"
+) %>%
+  DT::formatRound(columns = c("mean_value", "sd_value"), digits = 2)
+{% else %}
+# Basic summary
+summary(raw_data)
+{% endif %}
+```
+
+## Data Visualization
+
+```{r plots, fig.cap="Distribution of Values by Category"}
+{% if cookiecutter.include_tidyverse == 'y' %}
+# Create visualizations with ggplot2
+p1 <- ggplot(processed_data, aes(x = category, y = value, fill = category)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.2, alpha = 0.3) +
+  labs(
+    title = "Distribution of Values by Category",
+    x = "Category",
+    y = "Value",
+    fill = "Category"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+{% if cookiecutter.include_plotly == 'y' %}
+# Make interactive with plotly
+ggplotly(p1, tooltip = c("x", "y"))
+{% else %}
+print(p1)
+{% endif %}
+{% else %}
+# Basic R plotting
+boxplot(value ~ category, data = raw_data, 
+        main = "Distribution of Values by Category",
+        xlab = "Category", ylab = "Value")
+{% endif %}
+```
+
+```{r time-series, fig.cap="Time Series of Values"}
+{% if cookiecutter.include_tidyverse == 'y' %}
+# Time series plot
+p2 <- ggplot(processed_data, aes(x = date, y = value, color = category)) +
+  geom_line(alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(
+    title = "Time Series of Values",
+    x = "Date",
+    y = "Value",
+    color = "Category"
+  ) +
+  theme_minimal()
+
+{% if cookiecutter.include_plotly == 'y' %}
+ggplotly(p2)
+{% else %}
+print(p2)
+{% endif %}
+{% else %}
+# Basic time series plot
+plot(raw_data$date, raw_data$value, type = "l",
+     main = "Time Series of Values",
+     xlab = "Date", ylab = "Value")
+{% endif %}
+```
+
+# Analysis Results
+
+## Key Findings
+
+1. **Data Overview**: The dataset contains `r nrow(raw_data)` observations across `r ncol(raw_data)` variables.
+
+{% if cookiecutter.include_tidyverse == 'y' %}
+2. **Category Distribution**: 
+   - Category A: `r summary_stats$count[summary_stats$category == "A"]` observations
+   - Category B: `r summary_stats$count[summary_stats$category == "B"]` observations  
+   - Category C: `r summary_stats$count[summary_stats$category == "C"]` observations
+
+3. **Value Statistics**:
+   - Overall mean: `r round(mean(processed_data$value), 2)`
+   - Overall standard deviation: `r round(sd(processed_data$value), 2)`
+   - Range: `r round(min(processed_data$value), 2)` to `r round(max(processed_data$value), 2)`
+{% endif %}
+
+## Statistical Tests
+
+```{r statistical-tests}
+{% if cookiecutter.include_tidyverse == 'y' %}
+# ANOVA test
+anova_result <- aov(value ~ category, data = processed_data)
+anova_summary <- summary(anova_result)
+
+# Extract p-value
+p_value <- anova_summary[[1]][["Pr(>F)"]][1]
+
+cat("ANOVA Results:\n")
+cat("F-statistic:", round(anova_summary[[1]][["F value"]][1], 4), "\n")
+cat("p-value:", round(p_value, 4), "\n")
+cat("Significant difference between categories:", ifelse(p_value < 0.05, "Yes", "No"), "\n")
+{% else %}
+# Simple t-test example
+t_test_result <- t.test(raw_data$value)
+cat("One-sample t-test results:\n")
+cat("t-statistic:", round(t_test_result$statistic, 4), "\n")
+cat("p-value:", round(t_test_result$p.value, 4), "\n")
+{% endif %}
+```
+
+# Conclusions
+
+This example report demonstrates:
+
+1. **Data Loading**: How to load and validate data files
+2. **Data Processing**: Basic data cleaning and transformation
+3. **Visualization**: Creating informative plots and charts
+4. **Analysis**: Performing statistical tests and interpreting results
+5. **Documentation**: Generating reproducible reports
+
+## Next Steps
+
+- [ ] Add more sophisticated analysis methods
+- [ ] Include additional visualizations
+- [ ] Implement model validation
+- [ ] Add cross-validation procedures
+- [ ] Create interactive dashboards
+
+# Session Information
+
+```{r session-info}
+# Display session information for reproducibility
+sessionInfo()
+```
+
+---
+
+*Report generated on `r Sys.Date()` using {{ cookiecutter.project_name }} template.* 

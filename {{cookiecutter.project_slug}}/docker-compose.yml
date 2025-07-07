@@ -1,0 +1,66 @@
+services:
+  r-project:
+    build: .
+    container_name: "{{ cookiecutter.project_slug }}-dev"
+    volumes:
+      # Mount project directory for development
+      - .:/home/rstudio/workspace
+      # Persistent renv cache for faster package installation
+      - renv_cache:/home/rstudio/.local/share/renv
+      # RStudio configuration persistence
+      - rstudio_config:/home/rstudio/.config/rstudio
+      # R history persistence
+      - r_history:/home/rstudio
+      # Optional: Mount data directory for larger datasets
+      - ./data:/home/rstudio/workspace/data
+    ports:
+      # RStudio Server
+      - "8787:8787"
+      # Shiny apps
+      - "3838:3838"
+    environment:
+      # RStudio Server configuration
+      - DISABLE_AUTH=false
+      - ROOT=true
+      - USERID=1000
+      - GROUPID=1000
+      - PASSWORD={{ cookiecutter.rstudio_server_password }}
+      # R environment configuration
+      - R_ENVIRON_USER=/home/rstudio/workspace/.Renviron
+      - R_PROFILE_USER=/home/rstudio/workspace/.Rprofile
+      - RENV_PATHS_CACHE=/home/rstudio/.local/share/renv
+      # Timezone
+      - TZ={{ cookiecutter.timezone }}
+    working_dir: /home/rstudio/workspace
+    # Keep container running for development
+    tty: true
+    stdin_open: true
+    # Restart policy
+    restart: unless-stopped
+
+  # Optional: Separate service for production/batch processing
+  r-project-batch:
+    build: .
+    container_name: "{{ cookiecutter.project_slug }}-batch"
+    profiles:
+      - batch
+    volumes:
+      - .:/workspace
+      - renv_cache:/home/rstudio/.local/share/renv
+      - ./data:/workspace/data
+      - ./output:/workspace/output
+    environment:
+      - R_ENVIRON_USER=/workspace/.Renviron
+      - R_PROFILE_USER=/workspace/.Rprofile
+      - RENV_PATHS_CACHE=/home/rstudio/.local/share/renv
+      - TZ={{ cookiecutter.timezone }}
+    working_dir: /workspace
+    command: ["R", "--slave", "-f", "main.R"]
+
+volumes:
+  renv_cache:
+    driver: local
+  rstudio_config:
+    driver: local
+  r_history:
+    driver: local 

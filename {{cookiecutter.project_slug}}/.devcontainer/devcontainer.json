@@ -1,0 +1,94 @@
+{
+    "name": "{{ cookiecutter.project_name }} - R Development",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "r-project",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    
+    // Configure tool-specific properties
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // R language support
+                "reditorsupport.r",
+                "rdebugger.r-debugger",
+                "mikhail-arkhipov.r",
+            ],
+            "settings": {
+                // R specific settings
+                "r.rterm.linux": "/usr/local/bin/R",
+                "r.rterm.option": ["--no-save", "--no-restore", "--quiet"],
+                "r.rpath.linux": "/usr/local/bin/R",
+                "r.libPaths": ["/usr/local/lib/R/site-library", "/usr/local/lib/R/library"],
+                "r.alwaysUseActiveTerminal": true,
+                "r.bracketedPaste": true,
+                "r.sessionWatcher": true,
+                "r.rtermSendDelay": 0,
+                
+                // R LSP settings
+                "r.lsp.enabled": true,
+                "r.lsp.debug": false,
+                "r.lsp.diagnostics": true,
+                "r.lsp.rich_documentation": true,
+                
+                // File associations
+                "files.associations": {
+                    "*.R": "r",
+                    "*.Rmd": "rmd",
+                    "*.qmd": "quarto",
+                    "*.Rproj": "r"
+                },
+                
+                // Editor settings
+                "editor.tabSize": 2,
+                "editor.insertSpaces": true,
+                "editor.rulers": [80, 120],
+                "editor.wordWrap": "on",
+                "editor.minimap.enabled": false,
+                
+                // Terminal settings
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.cwd": "/home/rstudio/workspace",
+                
+                // Git settings
+                "git.autofetch": true,
+                "git.enableSmartCommit": true,
+                
+                // Exclude files from explorer
+                "files.exclude": {
+                    "**/renv/library/**": true,
+                    "**/renv/staging/**": true,
+                    "**/.Rhistory": true,
+                    "**/.RData": true,
+                    "**/.Ruserdata": true
+                }
+            }
+        }
+    },
+    
+    // Use 'forwardPorts' to make a list of ports inside the container available locally
+    "forwardPorts": [8787, 3838],
+    "portsAttributes": {
+        "8787": {
+            "label": "RStudio Server",
+            "onAutoForward": "openPreview"
+        },
+        "3838": {
+            "label": "Shiny Apps",
+            "onAutoForward": "openPreview"
+        }
+    },
+    
+    // Use 'postCreateCommand' to run commands after the container is created
+    "postCreateCommand": "echo 'Container ready for R development!'",
+    
+    // Features to add to the dev container
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    // Set container user
+    "remoteUser": "rstudio",
+    // Keep container running
+    "runServices": ["r-project"]
+} 

@@ -1,0 +1,52 @@
+# {{ cookiecutter.project_name }} - R Environment Configuration
+# This file sets environment variables for R sessions
+
+# Project information
+PROJECT_NAME="{{ cookiecutter.project_name }}"
+PROJECT_SLUG="{{ cookiecutter.project_slug }}"
+PROJECT_DESCRIPTION="{{ cookiecutter.project_description }}"
+PROJECT_AUTHOR="{{ cookiecutter.author_name }}"
+PROJECT_EMAIL="{{ cookiecutter.author_email }}"
+
+# R configuration
+R_VERSION="{{ cookiecutter.r_version }}"
+R_PROFILE_USER=".Rprofile"
+
+# renv configuration
+RENV_PATHS_CACHE="/home/rstudio/.local/share/renv"
+RENV_PATHS_CACHE_HOST="renv_cache"
+RENV_AUTOLOADER_ENABLED=TRUE
+RENV_ACTIVATE_PROJECT=TRUE
+
+# Package installation settings
+R_INSTALL_STAGED=FALSE
+R_COMPILE_AND_INSTALL_PACKAGES=interactive
+
+# Development settings
+R_KEEP_PKG_SOURCE=TRUE
+R_ENABLE_JIT=3
+
+# Parallel processing
+R_PARALLEL_CORES=4
+
+# Timezone
+TZ="{{ cookiecutter.timezone }}"
+
+# Language and locale
+LANG=en_US.UTF-8
+LC_ALL=en_US.UTF-8
+
+# Docker-specific settings
+DOCKER_CONTAINER=TRUE
+RUNNING_IN_DOCKER=TRUE
+
+# GitHub settings (if applicable)
+{% if cookiecutter.use_github == 'y' %}
+GITHUB_USERNAME="{{ cookiecutter.github_username }}"
+{% endif %}
+
+# Custom paths
+PATH_DATA="./data"
+PATH_OUTPUT="./output"
+PATH_SCRIPTS="./scripts"
+PATH_DOCS="./docs" 

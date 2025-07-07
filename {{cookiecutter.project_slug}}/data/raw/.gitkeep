@@ -1,0 +1,16 @@
+# Raw Data Directory
+
+This directory contains the original, immutable data files.
+
+## Guidelines
+
+- Never modify files in this directory
+- Document data sources and acquisition methods
+- Include metadata and data dictionaries when possible
+- Use descriptive filenames with dates if applicable
+
+## File Organization
+
+- Use subdirectories for different data sources
+- Include README files for complex datasets
+- Maintain original file formats when possible 

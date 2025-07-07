@@ -1,0 +1,114 @@
+# R specific files
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+*.Rproj
+
+# R temporary files
+*~
+*.swp
+*.swo
+
+# R package build artifacts
+*.tar.gz
+*.tgz
+/check/
+/src/*.o
+/src/*.so
+/src/*.dll
+
+# renv files (keep renv.lock but ignore library)
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+renv/python/
+renv/staging/
+
+# R Markdown outputs
+*.html
+*.pdf
+*.docx
+*.pptx
+*_cache/
+*_files/
+# /output/
+# /docs/
+/inst/doc/
+
+# Shiny app files
+rsconnect/
+shinyapps/
+
+# Data files (uncomment if you want to ignore data)
+# *.csv
+# *.tsv
+# *.xlsx
+# *.xls
+# *.rds
+# *.RDS
+# /data/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Docker files
+.dockerignore
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Python (in case of reticulate usage)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.lot
+*.lof
+*.out
+*.nav
+*.snm
+*.vrb
+
+# Local configuration files
+config.local.R
+secrets.R
+
+# Temporary directories
+tmp/
+temp/
+.tmp/ 

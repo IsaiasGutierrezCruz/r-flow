@@ -1,0 +1,22 @@
+{
+  "project_name": "my-r-project",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-').replace('_', '-') }}",
+  "project_description": "A reproducible R project using Docker and renv",
+  "author_name": "Your Name",
+  "author_email": "your.email@example.com",
+  "r_version": "4.3.2",
+  "use_git": "y",
+  "use_github": "y",
+  "github_username": "yourusername",
+  "license": ["MIT", "GPL-3", "Apache-2.0", "BSD-3-Clause", "None"],
+  "include_shiny": "n",
+  "include_rmarkdown": "y",
+  "include_plotly": "n",
+  "include_tidyverse": "n",
+  "include_devtools": "y",
+  "include_testthat": "y",
+  "include_lintr": "y",
+  "rstudio_server_password": "password123",
+  "timezone": "UTC",
+  "year": "{% now 'utc', '%Y' %}"
+} 
