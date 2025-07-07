@@ -1,4 +1,4 @@
-# r-flow 🍪
+# r-flow
 
 A comprehensive cookiecutter template for creating reproducible R projects with Docker, renv, and modern development tools.
 
