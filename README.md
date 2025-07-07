@@ -26,7 +26,7 @@ A comprehensive cookiecutter template for creating reproducible R projects with 
 
 ```bash
 # Using cookiecutter directly
-cookiecutter https://github.com/IsaiasGutierrezCruz/rtemplate
+cookiecutter https://github.com/IsaiasGutierrezCruz/r-flow
 ```
 
 ### Template Variables
