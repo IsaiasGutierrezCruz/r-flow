@@ -69,7 +69,7 @@ if (file.exists("renv.lock")) {
     "shinycssloaders",
     "shinyjs",
     "plotly",
-    "DT",
+    "DT"
   ))
   {% endif %}
   
